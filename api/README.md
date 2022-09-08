@@ -10,11 +10,24 @@ Run this powershell script:
 `/path/to/new/virtual/environment/Scripts/Activate.ps1`
 
 #### Linux & OSX
+
+Run this command:
+
 `source /path/to/new/virtual/environment/bin/activate`
 
-#### Turning off virtual environment
+#### Turning It Off
+
+Run this command:
+
 `deactivate`
 
 
 ### Installing Project Dependencies
 ---
+Navigate into the `api` directory and run this command:
+
+`pip install -r requirements.txt`
+
+### Running `dev` environment of API
+---
+WIP
