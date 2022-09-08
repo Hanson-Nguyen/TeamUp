@@ -32,7 +32,7 @@ def create_app(test_config=None):
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
-        app.config.from_pyfile("config.py", slient=True)
+        app.config.from_pyfile("config.py", silent=True)
     else:
         # load the test config if passed in
         app.config.update(test_config)
@@ -40,6 +40,9 @@ def create_app(test_config=None):
     # initialize Flask-SQLAlchemy and the init-db command
     db.init_app(app)
     app.cli.add_command(init_db_command)
+
+    from app import auth
+    app.register_blueprint(auth.bp)
 
     return app
 

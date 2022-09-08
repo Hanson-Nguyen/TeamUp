@@ -1,5 +1,6 @@
+from .endpoints import bp
+from .models import User
 from flask import request, jsonify, current_app
-from app.auth.models import User
 from functools import wraps
 import jwt
 
@@ -19,4 +20,4 @@ def token_required(f):
            return jsonify({'message': 'token is invalid'})
 
        return f(current_user, *args, **kwargs)
-   return decorator
+#    return decorator

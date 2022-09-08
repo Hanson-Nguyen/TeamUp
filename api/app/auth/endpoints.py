@@ -8,7 +8,7 @@ import datetime
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/login', methods=('POST'))
+@bp.route("/login", methods=['POST'])
 def login():
     """Log in a registered user by and sendback Jwt"""
     auth = request.authorization
@@ -24,7 +24,7 @@ def login():
 
     return make_response("Unauthorized", status.HTTP_401_UNAUTHORIZED)
 
-@bp.route('/register', methods=('POST'))
+@bp.route("/register", methods=['POST'])
 def register():
     error = None
     username = request.form['username']
