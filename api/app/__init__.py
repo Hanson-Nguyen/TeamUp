@@ -26,7 +26,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         # default secret that should be overriden in invorn or config
         SECRET_KEY=os.environ.get("SECRET_KEY", "dev"),
-        SQLALCHEY_DATABASE_URI=db_url,
+        SQLALCHEMY_DATABASE_URI=db_url,
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     )
 
