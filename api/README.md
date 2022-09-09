@@ -33,3 +33,9 @@ Navigate into the `api` directory and run this command:
 
 Inside `api` directory run:
 `flask --app app --debug run`
+
+### Running unit tests
+---
+
+Inside `api` directory run:
+`pytest --disable-pytest-warnings`

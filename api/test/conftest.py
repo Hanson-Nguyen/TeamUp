@@ -1,12 +1,13 @@
 from datetime import datetime
 
 import pytest
+import uuid
 from werkzeug.security import generate_password_hash
 
 from app import create_app
 from app import db
 from app import init_db
-from app.auth.models import User
+from app.models import User
 
 _user1_pass = generate_password_hash("test")
 _user2_pass = generate_password_hash("other")
@@ -21,11 +22,11 @@ def app():
     # set _password to pre-generated hashes, since hashing for each test is slow
     with app.app_context():
         init_db()
-        user = User(username="test", _password=_user1_pass)
+        user = User(username="test", _password=_user1_pass, email="user@test.com", public_id=str(uuid.uuid4()))
         db.session.add_all(
             (
                 user,
-                User(username="other", _password=_user2_pass),
+                User(username="other", _password=_user2_pass, email="other@test.com", public_id=str(uuid.uuid4())),
             )
         )
         db.session.commit()
