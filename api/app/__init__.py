@@ -2,6 +2,7 @@ import os
 
 import click
 from flask import Flask
+from flask import Blueprint
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 
@@ -41,8 +42,8 @@ def create_app(test_config=None):
     db.init_app(app)
     app.cli.add_command(init_db_command)
 
-    from app import auth
-    app.register_blueprint(auth.bp)
+    from app.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api')
 
     return app
 
