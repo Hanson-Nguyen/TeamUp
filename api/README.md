@@ -30,4 +30,6 @@ Navigate into the `api` directory and run this command:
 
 ### Running `dev` environment of API
 ---
-WIP
+
+Inside `api` directory run:
+`flask --app app --debug run`
