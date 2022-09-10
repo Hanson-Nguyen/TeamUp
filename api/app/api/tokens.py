@@ -8,7 +8,6 @@ from app.api.auth import token_auth
 @basic_auth.login_required
 def get_token():
     token = basic_auth.current_user().get_token()
-    print(token)
     db.session.commit()
     return jsonify({'token': token})
 

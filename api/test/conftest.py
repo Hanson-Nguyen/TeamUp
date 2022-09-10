@@ -16,19 +16,25 @@ _user2_pass = generate_password_hash("other")
 def app():
     """Create and configure a new app instance for each test."""
     # create the app with common test config
-    app = create_app({"TESTING": True, "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:"})
+    app = create_app({
+        "TESTING": True,
+        "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
+        "SERVER_NAME": "localhost",
+        "APPLICATION_ROOT": "/"
+    })
 
     # create the database and load test data
     # set _password to pre-generated hashes, since hashing for each test is slow
     with app.app_context():
         init_db()
-        user = User(username="test", _password=_user1_pass, email="user@test.com", public_id=str(uuid.uuid4()))
+
         db.session.add_all(
             (
-                user,
+                User(username="test", _password=_user1_pass, email="user@test.com", public_id=str(uuid.uuid4())),
                 User(username="other", _password=_user2_pass, email="other@test.com", public_id=str(uuid.uuid4())),
             )
         )
+
         db.session.commit()
 
     yield app
@@ -44,18 +50,3 @@ def client(app):
 def runner(app):
     """A test runner for the app's Click commands."""
     return app.test_cli_runner()
-
-
-class AuthActions:
-    def __init__(self, client):
-        self._client = client
-
-    def login(self, username="test", password="test"):
-        return self._client.post(
-            "/auth/login", data={"username": username, "password": password}
-        )
-
-
-@pytest.fixture
-def auth(client):
-    return AuthActions(client)

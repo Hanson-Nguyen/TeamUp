@@ -38,9 +38,6 @@ def create_user():
     user = User()
     user.from_dict(data, new_user=True)
 
-    if User.query.filter_by(public_id=user.public_id).first():
-        return bad_request()
-
     db.session.add(user)
     db.session.commit()
 
@@ -56,7 +53,8 @@ def update_user(id):
         abort(403)
 
     user = User.query.get_or_404(id)
-    data = request.get_json or {}
+    data = request.get_json() or {}
+
     if 'username' in data and data['username'] != user.username and \
         User.query.filter_by(username=data['username']).first():
         return bad_request()
