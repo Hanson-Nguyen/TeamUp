@@ -1,0 +1,51 @@
+@font-face {
+    font-family: sansation;
+    src: url('sansation_light.woff');
+  }
+
+img.logotitle {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    height: 10%;
+    width: 10%;
+    
+}
+
+h1 {
+    position: absolute;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+
+    font-family: sansation;
+    font-size: 100px;
+    
+}
+
+html {
+    background-image: url('../images/background_waves.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 300px;
+    width: 400px;
+
+    background: rgb(131,215,255);
+    background: linear-gradient(41deg, rgba(131,215,255,1) 0%, rgba(255,255,255,0.392127798384979) 100%);
+    
+    border-radius:25px;
+}
