@@ -6,13 +6,22 @@
   }
 
 body {
-    margin: 0;
-    padding: 20%;
-    background-image: url("../images/background_waves.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+
     font-family: sansation;
+}
+
+.content {
+    padding: 0;
+    margin: 0;
+    outline: 2px black solid;
+    height: 100vh;
+
+}
+
+.waves {
+    position: fixed;
+    bottom: 0px;
+    width: 100vw;
 }
 
 .signin {
