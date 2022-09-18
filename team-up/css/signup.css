@@ -1,0 +1,133 @@
+@import "reset.css";
+
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.content {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+
+.waves {
+    position: fixed;
+    bottom: 0px;
+    width: 100vw;
+}
+
+.signup {
+    height: 600px;
+    width: 500px;
+    border-radius: 25px;
+    padding: 2rem;
+    
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+
+    background: rgb(131,215,255);
+    background: linear-gradient(180deg, rgb(105, 251, 227) 0%, rgb(132, 237, 255) 100%);
+}
+
+.signup-card-logo img {
+    width: 100px;
+}
+
+.signup-card-logo,
+.signup-card-header,
+.signup-card-footer {
+    text-align: center;
+}
+
+.signup-card a{
+    text-decoration: none;
+    color: blue;
+}
+
+.form-title {
+    margin-left: 1rem;
+    padding-top: 1rem;
+}
+
+.form-item {
+    padding: 0.3rem;
+}
+
+.form-item.showPassword {
+    padding: 1rem;
+}
+
+.signup-card a:hover {
+    text-decoration: underline;
+}
+
+.signup-card-header {
+    margin-bottom: 0.5rem;
+}
+
+.signup-card-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: .8rem;
+}
+
+.signup-card-header h1 + div {
+    font-size: calc(1rem * .8)
+}
+
+.signup-card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0rem;
+}
+
+.signup-card-form .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.signup-card-footer {
+    margin-top: 1.5rem;
+    font-size: calc(1rem * .8);
+}
+
+.signup-card input[type ="text"],
+.signup-card input[type ="password"],
+.signup-card input[type ="email"] {
+    border: none;
+    outline: none;
+    padding: 0.2rem;
+    padding-left: 0.8rem;
+    border-radius: 100px;
+    width: 100%;
+}
+
+.signup-card input[type = "checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+.signup-card-form button{
+    
+    margin-top: 5%;
+    background: black;
+    color: white;
+    padding: 1rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+
+}
+
+.signup-card-form button:hover{
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
