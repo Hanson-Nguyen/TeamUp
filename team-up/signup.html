@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TeamUp Sign in</title>
+
+    <link rel = "icon" href = "images/TeamUp.png" type "image/x-icon">
+    
+    <link rel="stylesheet" type="text/css" href="css/signup.css">
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+  </head>
+  
+  <body>
+
+    <div class = "content">
+
+      <img src="images/background_waves_3.svg" alt="background waves" class = "waves">
+
+      <div class = "signup">
+        
+        <div class="signup-card">
+
+          <div class="signup-card-logo">
+            <img src="images/TeamUp.png" alt ="logo">
+          </div>
+
+          <div class="signup-card-header">
+              <h1>Welcome to TeamUp</h1>
+              <div>Sign up to team up with friends, classmates and the whole world with ease</div>
+          </div>
+
+          <form class="signup-card-form">
+            <div class="form-title">First Name</div>
+            <div class="form-item">
+              <input type="text" required autofocus>
+            </div>
+
+            <div class="form-title">Last Name</div>
+            <div class="form-item">
+              <input type="text" required autofocus>
+            </div>
+
+            <div class="form-title">Email Address</div>
+            <div class="form-item">
+              <input type="text" required autofocus>
+            </div>
+
+            <div class="form-title">Password</div>
+            <div class="form-item">
+              <input type="password" id = "passwordInput" required autofocus>
+              <input type="checkbox" onclick="myFunction()" class="showPassword">Show Password
+              <script>
+                function myFunction() {
+                  var x = document.getElementById("passwordInput");
+                  if (x.type === "password") {
+                    x.type = "text";
+                  } else {
+                    x.type = "password";
+                  }
+                }
+              </script>
+            </div>
+
+
+            <button type="submit">Create Account</button>
+
+          </form>
+
+          <div class="signup-card-footer">
+            Already have an account? <a href="signin.html">Sign in</a>.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </body>
+
+
+</html>
