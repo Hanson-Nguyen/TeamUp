@@ -1,7 +1,18 @@
 import { Link } from 'react-router-dom'
 import '../css/signin/signin.scss'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../components/auth-provider'
 
-function LoginPage() {
+const LoginPage = () => {
+  const { state } = useLocation()
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const { from } = state || {}
+
+  const test = () => {
+    login();
+    navigate(from);
+  }
   document.title = "TeamUp Sign in"
   return (
     <>
@@ -36,7 +47,7 @@ function LoginPage() {
               <Link to='/password-recovery'>Forgot Password?</Link>
             </div>
 
-            <button type='submit'>Sign in</button>
+            <button type='submit' onClick={test}>Sign in</button>
           </form>
         </div>
       </div>
