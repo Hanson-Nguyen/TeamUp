@@ -8,7 +8,7 @@ import { RequireAuth } from './auth-provider'
 const Router = () => (
   <Routes>
     <Route exact path='/' element={
-      <RequireAuth redirectTo="/login">
+      <RequireAuth redirectTo="/">
         <HomePage />
       </RequireAuth>
     } />
