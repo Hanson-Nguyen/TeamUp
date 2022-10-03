@@ -5,10 +5,12 @@ from flask import Flask
 from flask import Blueprint
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 __version__ = (1, 0, 0, "dev")
 
 db = SQLAlchemy()
+
 
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
@@ -28,7 +30,9 @@ def create_app(test_config=None):
         # default secret that should be overriden in invorn or config
         SECRET_KEY=os.environ.get("SECRET_KEY", "dev"),
         SQLALCHEMY_DATABASE_URI=db_url,
-        SQLALCHEMY_TRACK_MODIFICATIONS=False
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        CORS_ALLOW_HEADERS=['Content-Type', 'Authorization'],
+        CORS_SUPPORTS_CREDENTIALS=True
     )
 
     if test_config is None:
@@ -44,6 +48,8 @@ def create_app(test_config=None):
 
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
+
+    CORS(app, origins='http://localhost:3000')
 
     return app
 
