@@ -4,34 +4,60 @@ import '../css/signin/signin.scss'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../components/auth-provider'
 import ApiStore from '../components/api-store'
+import Alert from '../components/alert'
 
 const LoginPage = () => {
   document.title = "TeamUp Sign in"
   const navigate = useNavigate()
   const { login } = useAuth()
 
-  const initLoginState = {
+  const initFormState = {
     email: '',
     password: ''
   }
-
-  const [loginState, setLoginState] = useState(initLoginState)
+  const initAlertState = {
+    show: false,
+    message: '',
+    type: 'info'
+  }
+  const [formState, setFormState] = useState(initFormState)
+  const [alertState, setAlertState] = useState(initAlertState)
 
   const handleChange = (e, property) => {
     let updatedValue = {};
     updatedValue = { [property]: e.target.value };
-    setLoginState(loginState => ({
-          ...loginState,
+    setFormState(formState => ({
+          ...formState,
           ...updatedValue
         }));
     }
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    const res = await ApiStore.getToken(loginState)
+    const res = await ApiStore.getToken(formState)
+
+    if (!res) {
+      setAlertState({
+        show: true,
+        message: 'Invalid Username and Password.',
+        type: 'info'
+      })
+
+      return
+    }
+
     const token = JSON.parse(res)
     login(token);
     navigate('/');
+  }
+
+  const displayAlert = () => {
+
+    if (alertState.show) {
+      return <Alert type={alertState.type} message={alertState.message} />
+    }
+
+    return false
   }
 
   return (
@@ -49,14 +75,16 @@ const LoginPage = () => {
             <div>Sign in to team up with friends, classmates and the whole world with ease</div>
           </div>
 
+          {displayAlert()}
+
           <form className='signin-card-form' onSubmit={onSubmit}>
             <div className='form-item'>
               <span className='form-item-icon material-icons dark-blue'>mail</span>
-              <input className='form-input' type='text' placeholder='Enter Email' defaultValue={loginState.email} onChange={(e) => handleChange(e, 'email')} required autoFocus />
+              <input className='form-input' type='text' placeholder='Enter Email' defaultValue={formState.email} onChange={(e) => handleChange(e, 'email')} required autoFocus />
             </div>
             <div className='form-item'>
               <span className='form-item-icon material-icons dark-blue'>lock</span>
-              <input className='form-input' type='password' placeholder='Enter Password' defaultValue={loginState.password} onChange={(e) => handleChange(e, 'password')} required autoFocus />
+              <input className='form-input' type='password' placeholder='Enter Password' defaultValue={formState.password} onChange={(e) => handleChange(e, 'password')} required autoFocus />
             </div>
             <div className='form-item-other'>
               <div className='checkbox'>
@@ -69,6 +97,10 @@ const LoginPage = () => {
 
             <button type='submit'>Sign in</button>
           </form>
+
+          <div className="signin-card-footer">
+            Don't have an account? <Link to="/register">Create a free account</Link>.
+          </div>
         </div>
       </div>
     </>
