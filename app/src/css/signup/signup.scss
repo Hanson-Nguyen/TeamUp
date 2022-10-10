@@ -32,7 +32,7 @@ body {
     width: 500px;
     border-radius: 25px;
     padding: 2rem;
-    
+
     top: 50%;
     left: 50%;
     position: absolute;
@@ -61,7 +61,7 @@ body {
     a {
     text-decoration: none;
     color: black;
-        
+
         &:hover {
             text-decoration: underline;
         }
@@ -110,7 +110,7 @@ body {
     margin-top: 35px;
     gap: 0.75rem;
 
-    
+
     .form-item {
 
         .form-input {
@@ -137,9 +137,9 @@ body {
         justify-content: space-between;
         font-size: 0.8rem;
     }
-    
+
     button{
-        
+
         margin-top: 2%;
         background: black;
         color: white;
@@ -147,13 +147,28 @@ body {
         border-radius: 100px;
         text-transform: uppercase;
         letter-spacing: 2px;
-        
+
         &:hover{
             background-color: white;
             color: black;
             cursor: pointer;
         }
     }
-
 }
 
+.button {
+  margin-top: 2%;
+  background: black;
+  color: white;
+  padding: 1rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  width: 100%;
+
+  &:hover{
+      background-color: white;
+      color: black;
+      cursor: pointer;
+  }
+}
