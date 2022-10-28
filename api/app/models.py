@@ -35,15 +35,25 @@ class User(PaginatedMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     public_id = db.Column(db.Integer, unique=True, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
-    username = db.Column(db.String, unique=True, nullable=False)
+    _username = db.Column(db.String, unique=True, nullable=False)
     _password = db.Column("password", db.String, nullable=False)
+    first_name = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False)
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
     # TODO: Additional requirements for user
 
     @hybrid_property
+    def username(self):
+      return self._username
+
+    @hybrid_property
     def password(self):
         return self._password
+
+    @username.setter
+    def username(self, value):
+      self._username = value
 
     @password.setter
     def password(self, value):
@@ -53,28 +63,31 @@ class User(PaginatedMixin, db.Model):
     def check_password(self, value):
         return check_password_hash(self.password, value)
 
-    def to_dict(self, include_email=False):
+    def to_dict(self, includeProfile=False):
         data = {
             'id': self.id,
-            'username': self.username,
-            'public_id': self.public_id,
+            'email': self.email,
             '_links': {
                 'self': url_for('api.get_user', id=self.id)
             }
         }
 
-        if include_email:
-            data['email'] = self.email
+        if includeProfile:
+          data['first_name'] = self.first_name
+          data['last_name'] = self.last_name
+          data['public_id'] = self.public_id
+          data['username'] = self.username
 
         return data
 
     def from_dict(self, data, new_user=False):
-        for field in ['username', 'email']:
+        for field in ['username', 'email', 'first_name', 'last_name']:
             if field in data:
                 setattr(self, field, data[field])
         if new_user and 'password' in data:
             self.password = data['password']
             self.public_id = str(uuid.uuid4())
+            self.username = self.email
 
     def get_token(self, expires_in=3600):
         now = datetime.utcnow()

@@ -1,0 +1,137 @@
+@import "../reset.css";
+html {
+  font-family: sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.material-icons.dark-blue {
+  color: black;
+}
+
+.content {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
+
+.waves {
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+}
+
+.signin {
+  height: 550px;
+  width: 500px;
+  border-radius: 25px;
+  padding: 2rem;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  background: white;
+}
+
+.signin-card-logo {
+  margin-bottom: 2rem;
+}
+.signin-card-logo img {
+  width: 100px;
+}
+
+.signin-card-logo,
+.signin-card-header,
+.signin-card-footer {
+  text-align: center;
+}
+
+.signin-card a {
+  text-decoration: none;
+  color: black;
+}
+.signin-card a:hover {
+  text-decoration: underline;
+}
+
+.signin-card .signin-card-header {
+  margin-bottom: 1rem;
+}
+.signin-card .signin-card-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.signin-card .signin-card-header h1 + div {
+  font-size: 0.8rem;
+}
+
+.signin-card-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.signin-card-form .form-item {
+  margin-top: -0.5rem;
+}
+.signin-card-form .form-item .form-input {
+  background-color: whitesmoke;
+}
+.signin-card-form .form-item .form-item-icon {
+  position: relative;
+  top: 2.35rem;
+  left: 1.4rem;
+  font-size: 1.3rem;
+  opacity: 0.7;
+}
+.signin-card-form .checkbox {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+.signin-card-form .form-item-other {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+.signin-card-form button {
+  background: black;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.signin-card-form button:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.signin-card-footer {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+}
+
+.signin-card input[type=text],
+.signin-card input[type=password],
+.signin-card input[type=email] {
+  border: none;
+  outline: none;
+  padding: 1rem 1.5rem;
+  padding-left: 3.5rem;
+  border-radius: 100px;
+  width: 100%;
+}
+
+.signin-card input[type=checkbox] {
+  width: 16px;
+  height: 16px;
+}/*# sourceMappingURL=signin.css.map */

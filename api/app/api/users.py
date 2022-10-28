@@ -26,10 +26,7 @@ def get_users():
 def create_user():
     data = request.get_json() or {}
 
-    if 'username' not in data or 'email' not in data or 'password' not in data:
-        return bad_request()
-
-    if User.query.filter_by(username=data['username']).first():
+    if 'email' not in data or 'password' not in data:
         return bad_request()
 
     if User.query.filter_by(email=data['email']).first():

@@ -1,0 +1,174 @@
+@import "../reset.css";
+
+html {
+    font-family: sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.material-icons.dark-blue {
+    color: black
+}
+
+.content {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+
+}
+
+.waves {
+    position: fixed;
+    bottom: 0px;
+    width: 100vw;
+}
+
+.signup {
+    height: 600;
+    width: 500px;
+    border-radius: 25px;
+    padding: 2rem;
+
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+
+    background: white;
+    //background: linear-gradient(180deg, rgb(0, 255, 213) 0%, rgb(0, 180, 212) 100%);
+}
+
+.signup-card-logo {
+    margin-bottom: 0.5rem;
+
+    img {
+        width: 150px;
+    }
+}
+
+.signup-card-logo,
+.signup-card-header,
+.signup-card-footer {
+    text-align: center;
+}
+
+.signup-card {
+    a {
+    text-decoration: none;
+    color: black;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.signup-card-header {
+    margin-bottom: 0.5rem;
+
+    h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+    }
+
+    h1 + div {
+        font-size: calc(1rem * .8)
+    }
+}
+
+.signup-card-footer {
+    margin-top: 1.5rem;
+    font-size: calc(1rem * 0.8);
+}
+
+.signup-card input[type ="text"],
+.signup-card input[type ="password"],
+.signup-card input[type ="email"] {
+    border: none;
+    outline: none;
+    padding: 1rem 1.5rem;
+    padding-left: calc(1rem * 1.5);
+    border-radius: 100px;
+    width: 100%;
+}
+
+.signup-card input[type = "checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+
+.signup-card-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 35px;
+    gap: 0.75rem;
+
+
+    .form-item {
+
+        .form-input {
+            background-color: whitesmoke;
+        }
+        .form-item-icon {
+            position: relative;
+            top: 2.35rem;
+            left: 1.4rem;
+            font-size: 1.3rem;
+            opacity: .7;
+        }
+    }
+
+    .checkbox {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .form-item-other {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.8rem;
+    }
+
+    button{
+
+        margin-top: 2%;
+        background: black;
+        color: white;
+        padding: 1rem;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+
+        &:hover{
+            background-color: white;
+            color: black;
+            cursor: pointer;
+        }
+    }
+}
+
+.button {
+  margin-top: 2%;
+  background: black;
+  color: white;
+  padding: 1rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  width: 100%;
+
+  &:hover{
+      background-color: white;
+      color: black;
+      cursor: pointer;
+  }
+}
