@@ -8,7 +8,7 @@
 * [License](#license)
 
 ## Overview
-TeamUp is a platform for grouping of any amount of mindividuals to create optimal and balanced groups/teams for a particular goal. 
+TeamUp is a platform for grouping of any amount of mindividuals to create optimal and balanced groups/teams for a particular goal.
 
 TeamUp's client-facing application is written in JavaScript using the ReactJS framework, and BootStrap will handle styling. This combination allows quick prototyping and getting a minimal viable product (MVP) ready before the deadline. The API Layer will be written in Python, which bridges the communication between the web application and database. Python also provides robust data science libraries.
 
@@ -20,6 +20,9 @@ TeamUp's client-facing application is written in JavaScript using the ReactJS fr
 + Others
 
 ## Installation
+For information on how to run the client application visit [here](app/README.md)
+
+For information on how to run the api visit [here](api/README.md)
 
 ## License
 
