@@ -1,0 +1,114 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+body {
+  background: rgb(255, 255, 255);
+}
+
+.wrapper {
+  display: flex;
+  position: relative;
+}
+.wrapper .navbar {
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  background: #002D62;
+  padding: 30px 0;
+}
+.wrapper .navbar .logo {
+  width: 40px;
+  height: 40px;
+}
+.wrapper .navbar h1 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.wrapper .navbar ul li {
+  padding: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(225, 225, 225, 0.05);
+}
+.wrapper .navbar ul li:hover {
+  background: #014088;
+}
+.wrapper .navbar ul li a {
+  color: white;
+  display: block;
+}
+.wrapper .navbar ul li a .fas {
+  width: 25px;
+}
+.wrapper .main {
+  width: 100%;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+.wrapper .main .joinclass {
+  height: 320px;
+  width: 1000px;
+  border-radius: 25px;
+  padding: 2rem;
+  margin-top: 20%;
+  margin-left: 10%;
+  position: relative;
+  box-sizing: border-box;
+  background: #002D62;
+  align-items: center;
+}
+.wrapper .main .joinclass .title {
+  color: white;
+  text-align: center;
+}
+.wrapper .main .joinclass .info {
+  font-size: 55px;
+  color: white;
+  text-align: center;
+}
+.wrapper .main .joinclass .codebox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.wrapper .main .joinclass .codebox input {
+  height: 80px;
+  width: 80px;
+  font-size: 48px;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 2px;
+  border: 2px solid #55525c;
+  background: #0b1230;
+  font-weight: bold;
+  color: #fff;
+  outline: none;
+  transition: all 0.1s;
+}
+.wrapper .main .joinclass .codebox input:focus {
+  border: 2px solid #5091ce;
+}
+.wrapper .main .joinclass button {
+  background: #0b1230;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 25px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  width: 50%;
+  margin-top: 2.5%;
+  margin-left: 25%;
+  font-size: 48px;
+}
+.wrapper .main .joinclass button:hover {
+  background-color: white;
+  color: #0b1230;
+  cursor: pointer;
+}/*# sourceMappingURL=join.css.map */
