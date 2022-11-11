@@ -111,4 +111,8 @@ body {
   background-color: white;
   color: #0b1230;
   cursor: pointer;
+}
+
+.disabled {
+  opacity: 0.5;
 }/*# sourceMappingURL=join.css.map */
