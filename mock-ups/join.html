@@ -34,19 +34,70 @@
                 <div class="joinclass">
                     <div class="info">Enter a class code to join a class</div>
                     
-                    <div class="codebox">
-                        <input type="text" maxlength ="1">
-                        <input type="text" maxlength ="1">
-                        <input type="text" maxlength ="1">
-                        <input type="text" maxlength ="1">
-                        <input type="text" maxlength ="1">
-                        <input type="text" maxlength ="1">
-                    </div>
+                    <form>
+                        <div class="codebox">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                        </div>
+                    </form>
+                    
+                    <button type="submit" id = "btn">Join</button>
 
-                    <button type="submit">Join</button>
+                    <script>
+                        const inputs = document.querySelectorAll(".codebox input")
+
+                        inputs.forEach((input, index) => {
+                            input.dataset.index = index;
+                            input.addEventListener("paste", handleCodepaste);
+                            input.addEventListener("keyup", handleCode);
+                        });
+
+                        function handleCodepaste(e){
+                            const data = e.clipboardData.getData("text");
+                            const value = data.split("");
+                            if(value.length === inputs.length) {
+                                inputs.forEach((input, index) => (input.value = value[index]));
+                                submit();
+                            }
+                        }
+
+                        function handleCode(e) {
+                            const input = e.target;
+                            let value = input.value;
+                            input.value = "";
+                            input.value = value ? value[0] : "";
+
+                            let fieldIndex = input.dataset.index;
+                            if(value.length > 0 && fieldIndex < inputs.length - 1){
+                                input.nextElementSibling.focus();
+                            }
+
+                            if(e.key === "Backspace" && fieldIndex > 0) {
+                                input.previousElementSibling.focus();
+                            }
+                        }
+
+                        let btn = document.getElementById("btn");
+                        btn.addEventListener('click', event => {
+                            submit();
+                        })
+
+                        function submit() {
+                            console.log("Submitting...!");
+                            let code = "";
+                            inputs.forEach((input) => {
+                                code += input.value;
+
+                            });
+                            console.log(code);
+                        }
+                    </script>
                 </div>
             </div>
         </div>
-
     </body>
 </html>
