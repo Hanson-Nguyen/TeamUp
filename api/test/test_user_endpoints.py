@@ -10,7 +10,7 @@ def test_get_user_by_id_without_authorization(client):
 
 def test_get_user_by_id(app, client):
     with app.app_context():
-        user = User.query.filter_by(username="test").first()
+        user = User.query.filter_by(id=1).first()
         token = user.get_token()
 
         response = client.get(
@@ -28,7 +28,7 @@ def test_get_users_without_authorization(client):
 
 def test_get_users(app, client):
     with app.app_context():
-        user = User.query.filter_by(username="test").first()
+        user = User.query.filter_by(id=1).first()
         token = user.get_token()
 
         response = client.get(
@@ -98,9 +98,10 @@ def test_create_user(app, client):
         response = client.post(
             '/api/users',
             json={
-                "username": "test2",
                 "email": "user2@test.com",
-                "password": "abc123"
+                "password": "abc123",
+                "first_name": "some",
+                "last_name": "body"
             },
             headers=headers
         )
@@ -122,7 +123,7 @@ def test_update_user_without_authorization(app, client):
 
 def test_update_user_not_you(app, client):
     with app.app_context():
-        token = User.query.filter_by(username="test").first().get_token()
+        token = User.query.filter_by(id=1).first().get_token()
 
         mimetype = 'application/json'
         headers = {
@@ -141,7 +142,7 @@ def test_update_user_not_you(app, client):
 
 def test_update_user_already_created(app, client):
     with app.app_context():
-        token = User.query.filter_by(username="test").first().get_token()
+        token = User.query.filter_by(id=1).first().get_token()
 
         mimetype = 'application/json'
         headers = {
@@ -158,18 +159,10 @@ def test_update_user_already_created(app, client):
 
         assert response.status == '400 BAD REQUEST'
 
-        response = client.put('/api/users/1',
-            json={
-                "username": "other"
-            },
-            headers=headers
-        )
-
-        assert response.status == '400 BAD REQUEST'
 
 def test_update_user(app, client):
     with app.app_context():
-        token = User.query.filter_by(username="test").first().get_token()
+        token = User.query.filter_by(id=1).first().get_token()
 
         mimetype = 'application/json'
         headers = {
