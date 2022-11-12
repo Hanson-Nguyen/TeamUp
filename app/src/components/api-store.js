@@ -51,6 +51,23 @@ const ApiStore = () => (
       }
 
       return await ApiRunner('POST', '/users', payload, callback)
+    },
+    createProject: async ({name, description, size, type}) => {
+      const payload = {
+        body: JSON.stringify({name, description, size, type}),
+        headers: new Headers({
+          "Content-Type": "application/json"
+        })
+      }
+
+      const callback = (res) => {
+        if (res.ok) {
+          const result = res.text()
+          return result
+        }
+      }
+
+      return await ApiRunner('POST', 'projects', payload, callback)
     }
   }
 );
