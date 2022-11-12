@@ -77,7 +77,8 @@
                             }
 
                             if(e.key === "Backspace" && fieldIndex > 0) {
-                                input.previousElementSibling.focus();
+                                inputs.forEach(input => input.value = '');
+                                document.forms[0][0].focus();
                             }
                         }
 
