@@ -48,4 +48,117 @@ body {
 .wrapper .main {
   width: 100%;
   margin-left: 200px;
+}
+
+.create {
+  height: 600px;
+  width: 500px;
+  border-radius: 25px;
+  padding: 2rem;
+  margin-top: 5%;
+  left: 40%;
+  position: absolute;
+  box-sizing: border-box;
+  background: #002D62;
+}
+
+.create-card-logo,
+.create-card-header,
+.create-card-footer {
+  text-align: center;
+  color: white;
+}
+
+.create-card a {
+  text-decoration: none;
+  color: white;
+}
+.create-card a:hover {
+  text-decoration: underline;
+}
+
+.create-card-header {
+  margin-bottom: 0.5rem;
+}
+.create-card-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.create-card-header h1 + div {
+  font-size: 0.8rem;
+}
+
+.create-card-footer {
+  margin-top: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.create-card input[type=text],
+.create-card input[type=password],
+.create-card input[type=email] {
+  border: none;
+  outline: none;
+  padding: 1rem 1.5rem;
+  padding-left: 1.5rem;
+  border-radius: 100px;
+  width: 100%;
+}
+
+.create-card input[type=checkbox] {
+  width: 16px;
+  height: 16px;
+}
+
+.create-card-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 35px;
+  gap: 0.75rem;
+}
+.create-card-form .form-title {
+  color: white;
+  font-size: 1.5rem;
+}
+.create-card-form .form-item .form-input {
+  background-color: whitesmoke;
+  font-size: 1.32rem;
+}
+.create-card-form .form-item .form-item-icon {
+  position: relative;
+  top: 2.35rem;
+  left: 1.4rem;
+  font-size: 1.32rem;
+  opacity: 0.7;
+}
+.create-card-form .form-item .select-dropdown {
+  font-size: 1.32rem;
+  width: 20.5em;
+  height: 2.5em;
+  border-radius: 5px;
+}
+.create-card-form .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.create-card-form .form-item-other {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+.create-card-form button {
+  margin-top: 2%;
+  background: black;
+  color: white;
+  padding: 1rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.create-card-form button:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
 }/*# sourceMappingURL=create.css.map */
