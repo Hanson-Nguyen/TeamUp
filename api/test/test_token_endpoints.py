@@ -2,6 +2,7 @@ import pytest
 import base64
 from app.models import User
 
+
 def test_get_token(app, client):
     with app.app_context():
         message_bytes = 'user@test.com:test'.encode('ascii')
@@ -18,14 +19,17 @@ def test_get_token(app, client):
 
         assert response.status == '200 OK'
 
+
 def test_get_token_unauthorized(app, client):
     with app.app_context():
         response = client.post('api/tokens')
         assert response.status == '401 UNAUTHORIZED'
 
+
 def test_revoke_token(app, client):
     with app.app_context():
-        token = User.query.filter_by(username="user@test.com").first().get_token()
+        token = User.query.filter_by(
+            username="user@test.com").first().get_token()
         response = client.delete(
             'api/tokens',
             headers={'Authorization': f'Bearer {token}'}

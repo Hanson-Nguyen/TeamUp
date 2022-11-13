@@ -4,7 +4,7 @@ import os
 from flask import url_for
 from datetime import datetime
 from datetime import timedelta
-from sqlalchemy import ForeignKey, Column
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.exc import NoResultFound
@@ -12,6 +12,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from app import db
+
 
 class PaginatedMixin(object):
     @staticmethod
@@ -28,65 +29,69 @@ class PaginatedMixin(object):
             '_links': {
                 'self': url_for(endpoint, page=page, per_page=per_page, **kwargs),
                 'next': url_for(endpoint, page=page + 1, per_page=per_page, **kwargs) if resources.has_next else None,
-                'prev': url_for(endpoint, page=page -1, per_page=per_page, **kwargs) if resources.has_prev else None
+                'prev': url_for(endpoint, page=page - 1, per_page=per_page, **kwargs) if resources.has_prev else None
             }
         }
 
         return data
 
-class ProjectType(db.Model):
-  __tablename__ = "project_type"
-  id = db.Column(db.Integer, primary_key=True)
-  type = db.Column(db.String, unique=True, nullable=False)
 
-  project = relationship("Project")
+class Tag(db.Model):
+    __tablename__ = "tag"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True, nullable=False)
+
+    project = relationship("Project")
 
 
 class Project(PaginatedMixin, db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String, unique=False, nullable=False)
-  description = db.Column(db.String, unique=False, nullable=True)
-  size = db.Column(db.Integer, unique=False, nullable=False)
-  type_id = db.Column(db.Integer, ForeignKey("project_type.id"))
+    id = db.Column(db.Integer, primary_key=True)
+    tag_id = db.Column(db.Integer, ForeignKey("tag.id"))
+    name = db.Column(db.String, unique=False, nullable=False)
+    description = db.Column(db.String, unique=False, nullable=True)
+    size = db.Column(db.Integer, unique=False, nullable=False)
+    published = db.Column(db.Boolean, unique=False, nullable=False, default=False)
 
+    @validates('size')
+    def validate_size(self, key, size):
 
-  @validates('size')
-  def validate_size(self, key, size):
+        if size <= 0 and size > 100:
+            raise ValueError('Invalid size range must be between 1 and 100')
 
-    if size <=0 and size > 100:
-      raise ValueError('Invalid size range must be between 1 and 100')
+        return size
 
-    return size
-
-  def to_dict(self, includeType=False):
-    data = {
-        'id': self.id,
-        'name': self.name,
-        'size': self.size,
-        'description': self.description,
-        '_links': {
-            'self': url_for('api.get_project', id=self.id)
+    def to_dict(self, includeType=False):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'size': self.size,
+            'description': self.description,
+            '_links': {
+                'self': url_for('api.get_project', id=self.id)
+            }
         }
-    }
 
-    if includeType:
-      project_type = ProjectType.query.filter_by(type=self.type_id).first()
-      data['type'] = project_type.type
+        if includeType:
+            tag = Tag.query.filter_by(
+                type=self.type_id).first()
+            data['tag'] = tag.type
 
-    return data
+        return data
 
-  def from_dict(self, data, new_project=False):
-    for field in ['name', 'size', 'description']:
-      if field in data:
-        setattr(self, field, data[field])
+    def from_dict(self, data, new_project=False):
+        for field in ['name', 'size', 'description']:
+            if field in data:
+                setattr(self, field, data[field])
 
-    if new_project and 'type' in data:
-      project_type = ProjectType.query.filter_by(type=data['type']).first()
+        if new_project and 'type' in data:
+            tag = Tag.query.filter_by(
+                type=data['tag']).first()
 
-      if project_type:
-        self.type_id = project_type.id
-      else:
-        raise NoResultFound()
+            if tag:
+                self.type_id = tag.id
+            else:
+                raise NoResultFound()
+
 
 class User(PaginatedMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -102,7 +107,7 @@ class User(PaginatedMixin, db.Model):
 
     @hybrid_property
     def username(self):
-      return self._username
+        return self._username
 
     @hybrid_property
     def password(self):
@@ -110,7 +115,7 @@ class User(PaginatedMixin, db.Model):
 
     @username.setter
     def username(self, value):
-      self._username = value
+        self._username = value
 
     @password.setter
     def password(self, value):
@@ -130,15 +135,15 @@ class User(PaginatedMixin, db.Model):
         }
 
         if includeProfile:
-          data['first_name'] = self.first_name
-          data['last_name'] = self.last_name
-          data['public_id'] = self.public_id
-          data['username'] = self.username
+            data['first_name'] = self.first_name
+            data['last_name'] = self.last_name
+            data['public_id'] = self.public_id
+            data['username'] = self.username
 
         return data
 
     def from_dict(self, data, new_user=False):
-        for field in ['username', 'email', 'first_name', 'last_name']:
+        for field in ['email', 'first_name', 'last_name']:
             if field in data:
                 setattr(self, field, data[field])
         if new_user and 'password' in data:
@@ -166,3 +171,11 @@ class User(PaginatedMixin, db.Model):
             return None
 
         return user
+
+
+user_project = db.Table('user_project',
+                        db.Column('user_id', db.Integer,
+                                  db.ForeignKey('user.id')),
+                        db.Column('project_id', db.Integer,
+                                  db.ForeignKey('project.id'))
+                        )

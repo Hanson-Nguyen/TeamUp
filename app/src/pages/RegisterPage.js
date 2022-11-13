@@ -56,7 +56,7 @@ const RegisterPage = () => {
 
       const res = await ApiStore.createUser(formState)
 
-      if (!res) {
+      if (res.error) {
         setAlertState({
           show: true,
           message: 'That email is already in use.',

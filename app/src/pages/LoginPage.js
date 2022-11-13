@@ -36,7 +36,7 @@ const LoginPage = () => {
     e.preventDefault()
     const res = await ApiStore.getToken(formState)
 
-    if (!res) {
+    if (res.error) {
       setAlertState({
         show: true,
         message: 'Invalid Username and Password.',
@@ -46,8 +46,7 @@ const LoginPage = () => {
       return
     }
 
-    const token = JSON.parse(res)
-    login(token);
+    login(res);
     navigate('/');
   }
 

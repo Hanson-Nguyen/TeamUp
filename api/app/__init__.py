@@ -49,7 +49,7 @@ def create_app(test_config=None):
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
 
-    CORS(app, origins='http://localhost:3000')
+    CORS(app, origins=['http://localhost:3000', 'http://localhost'])
 
     return app
 
