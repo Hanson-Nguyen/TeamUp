@@ -1,7 +1,7 @@
 from app.api import bp
 from flask import abort
 from app import db
-from app.models import Project, Tag
+from app.models import Project
 from flask import jsonify
 from flask import request
 from flask import url_for
@@ -10,11 +10,13 @@ from app.api.auth import token_auth
 
 
 @bp.route('/projects/<int:id>', methods=['GET'])
+@token_auth.login_required
 def get_project(id):
     return jsonify(Project.query.get_or_404(id).to_dict())
 
 
 @bp.route('/projects', methods=['GET'])
+@token_auth.login_required
 def get_projects():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
@@ -24,6 +26,7 @@ def get_projects():
 
 
 @bp.route('/projects', methods=['POST'])
+@token_auth.login_required
 def create_project():
     data = request.get_json() or {}
 
@@ -50,6 +53,7 @@ def create_project():
 
 
 @bp.route('/projects/<int:id>', methods=['PUT'])
+@token_auth.login_required
 def update_project(id):
     project = Project.query.get_or_404(id)
     data = request.get_json() or {}
@@ -61,6 +65,7 @@ def update_project(id):
 
 
 @bp.route('/projects/<int:id>/publish', methods=['GET'])
+@token_auth.login_required
 def publish_project(id):
     project = Project.query.get_or_404(id)
     project.published = True
@@ -71,5 +76,10 @@ def publish_project(id):
 
 
 @bp.route('/projects/<int:id>', methods=['DELETE'])
-def delete_projects():
-    return NotImplemented
+@token_auth.login_required
+def delete_projects(id):
+    Project.query.filter_by(id=id).delete()
+
+    db.session.commit()
+
+    return '', 204
