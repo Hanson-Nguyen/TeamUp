@@ -15,6 +15,7 @@ db = SQLAlchemy()
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
+    app.app_context().push()
 
     # some deploy systems set the database url in the environ
     db_url = os.environ.get("DATABASE_URL")
@@ -57,7 +58,6 @@ def create_app(test_config=None):
 def init_db():
     db.drop_all()
     db.create_all()
-
 
 @click.command("init-db")
 @with_appcontext

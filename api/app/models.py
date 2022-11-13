@@ -1,7 +1,7 @@
 import uuid
 import base64
 import os
-from flask import url_for
+from flask import url_for, current_app
 from datetime import datetime
 from datetime import timedelta
 from sqlalchemy import ForeignKey
@@ -12,7 +12,6 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from app import db
-
 
 class PaginatedMixin(object):
     @staticmethod
@@ -60,21 +59,21 @@ class Project(PaginatedMixin, db.Model):
 
         return size
 
-    def to_dict(self, includeType=False):
+    def to_dict(self, include=False):
         data = {
             'id': self.id,
             'name': self.name,
-            'size': self.size,
-            'description': self.description,
             '_links': {
                 'self': url_for('api.get_project', id=self.id)
             }
         }
 
-        if includeType:
+        if include:
             tag = Tag.query.filter_by(
-                type=self.type_id).first()
-            data['tag'] = tag.type
+                id=self.tag_id).first()
+            data['tag'] = tag.name
+            data['size'] = self.size
+            data['description'] = self.description
 
         return data
 
@@ -83,12 +82,12 @@ class Project(PaginatedMixin, db.Model):
             if field in data:
                 setattr(self, field, data[field])
 
-        if new_project and 'type' in data:
+        if new_project and 'tag' in data:
             tag = Tag.query.filter_by(
-                type=data['tag']).first()
+                name=data['tag']).first()
 
             if tag:
-                self.type_id = tag.id
+                self.tag_id = tag.id
             else:
                 raise NoResultFound()
 
@@ -125,7 +124,7 @@ class User(PaginatedMixin, db.Model):
     def check_password(self, value):
         return check_password_hash(self.password, value)
 
-    def to_dict(self, includeProfile=False):
+    def to_dict(self, include=False):
         data = {
             'id': self.id,
             'email': self.email,
@@ -134,7 +133,7 @@ class User(PaginatedMixin, db.Model):
             }
         }
 
-        if includeProfile:
+        if include:
             data['first_name'] = self.first_name
             data['last_name'] = self.last_name
             data['public_id'] = self.public_id
@@ -179,3 +178,14 @@ user_project = db.Table('user_project',
                         db.Column('project_id', db.Integer,
                                   db.ForeignKey('project.id'))
                         )
+
+with current_app.app_context():
+    if current_app.config["SECRET_KEY"] == "dev":
+        tags = Tag.query.all()
+
+        if len(tags) == 0:
+            db.session.add(Tag(name='sports'))
+            db.session.add(Tag(name='science'))
+            db.session.add(Tag(name='programming'))
+
+            db.session.commit()
