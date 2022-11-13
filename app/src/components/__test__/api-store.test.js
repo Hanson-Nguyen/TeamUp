@@ -120,10 +120,3 @@ describe('Class: ApiStore', () => {
     }
   })
 })
-
-
-
-/*
-  first_name: bob
-  last_name: d
-*/
