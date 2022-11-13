@@ -105,16 +105,66 @@ const ApiStore = () => (
 
       return await ApiRunner('DELETE', `/users/${id}`, payload)
     },
-    createProject: async ({ name, description, size, type }) => {
+    createProject: async (token, { name, description, size, tag }) => {
       const payload = {
-        body: JSON.stringify({ name, description, size, type }),
+        body: JSON.stringify({ name, description, size, tag }),
         headers: new Headers({
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
         })
       }
 
-      return await ApiRunner('POST', 'projects', payload)
+      return await ApiRunner('POST', '/projects', payload)
     },
+    getProjects: async (token) => {
+      const payload = {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
+        })
+      }
+
+      return await ApiRunner('GET', '/projects', payload)
+    },
+    getProjectById: async (id, token) => {
+      const payload = {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
+        })
+      }
+
+      return await ApiRunner('GET', `/projects/${id}`, payload)
+    },
+    updateProject: async (id, token, { name, description, size, tag }) => {
+      const payload = {
+        body: JSON.stringify({ name, description, size, tag }),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
+        })
+      }
+
+      return await ApiRunner('PUT', `/projects/${id}`, payload)
+    },
+    publishProject: async (id, token) => {
+      const payload = {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
+        })
+      }
+
+      return await ApiRunner('GET', `/projects/${id}/publish`, payload)
+    },
+    deleteProject: async(id, token) => {
+      const payload = {
+        headers: new Headers({
+          'Authorization': 'Bearer ' + token
+        })
+      }
+      return await ApiRunner('DELETE', `/projects/${id}`, payload)
+    }
   }
 );
 
