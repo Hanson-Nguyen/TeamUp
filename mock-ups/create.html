@@ -1,1 +1,68 @@
 <!--Create A Class Page that allows a user to create a class with different settings-->
+<!--Classes page to allow users to view their existing classes. If new user and has no classes, Classes page will display a suggestion to join a class-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TeamUp</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+        <link rel="stylesheet" href="./css/create/create.css">
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="navbar">
+                <h1>
+                    <img src="images/TeamUp.png" alt="TeamUp Logo" class="logo">
+                    TeamUp
+                </h1>
+
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
+                    <li><a href="classes.html"><i class="fa-solid fa-layer-group"></i> Classes</a></li>
+                    <li><a href="join.html"><i class="fa-solid fa-plus"></i> Join A Class</a></li>
+                    <li><a href="create.html"><i class="fa-solid fa-file-pen"></i> Create a Class</a></li>
+                </ul>
+            </div>
+
+            <div class = "create">
+              <div class="create-card"> 
+                <div class="create-card-header">
+                    <h1>Create a class</h1>
+                </div>
+      
+                <form class="create-card-form">
+                  <div class="form-title">Title</div>
+                  <div class="form-item">
+                    <input class= "form-input" type="text" required autofocus>
+                  </div>
+      
+                  <div class="form-title">Size</div>
+                  <div class="form-item">
+                    <input class= "form-input" type="text" required autofocus>
+                  </div>
+      
+                  <div class="form-title">Type</div>
+                  <div class="form-item">
+                    <select class = "select-dropdown" type="text">
+                      <option value="" disabled selected>Select a class type</option>
+                      <option value = "sports">Sports</option>
+                      <option value = "science">Science</option>
+                    </select>
+                  </div>
+                  
+                  <button type="submit">Create Class</button>
+      
+                </form>
+      
+                <div class="create-card-footer">
+                  Already have a class? <a href="join.html">Join a class</a>.
+                </div>
+              </div>
+            </div>
+        </div>
+    </body>
+</html>

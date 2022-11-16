@@ -1,1 +1,104 @@
 <!--Join Class Page to allow users to join a class using a code/link-->
+<!--Classes page to allow users to view their existing classes. If new user and has no classes, Classes page will display a suggestion to join a class-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TeamUp</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+        <link rel="stylesheet" href="./css/join/join.css">
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="navbar">
+                <h1>
+                    <img src="images/TeamUp.png" alt="TeamUp Logo" class="logo">
+                    TeamUp
+                </h1>
+
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-house-chimney"></i> Home</a></li>
+                    <li><a href="classes.html"><i class="fa-solid fa-layer-group"></i> Classes</a></li>
+                    <li><a href="join.html"><i class="fa-solid fa-plus"></i> Join A Class</a></li>
+                    <li><a href="create.html"><i class="fa-solid fa-file-pen"></i> Create a Class</a></li>
+                </ul>
+
+
+            </div>
+            
+            <div class = "main">
+                <div class="joinclass">
+                    <div class="info">Enter a class code to join a class</div>
+                    
+                    <form>
+                        <div class="codebox">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                            <input type="text" maxlength ="1">
+                        </div>
+                    </form>
+                    
+                    <button type="submit" id = "btn">Join</button>
+
+                    <script>
+                        const inputs = document.querySelectorAll(".codebox input")
+
+                        inputs.forEach((input, index) => {
+                            input.dataset.index = index;
+                            input.addEventListener("paste", handleCodepaste);
+                            input.addEventListener("keyup", handleCode);
+                        });
+
+                        function handleCodepaste(e){
+                            const data = e.clipboardData.getData("text");
+                            const value = data.split("");
+                            if(value.length === inputs.length) {
+                                inputs.forEach((input, index) => (input.value = value[index]));
+                                submit();
+                            }
+                        }
+
+                        function handleCode(e) {
+                            const input = e.target;
+                            let value = input.value;
+                            input.value = "";
+                            input.value = value ? value[0] : "";
+
+                            let fieldIndex = input.dataset.index;
+                            if(value.length > 0 && fieldIndex < inputs.length - 1){
+                                input.nextElementSibling.focus();
+                            }
+
+                            if(e.key === "Backspace" && fieldIndex > 0) {
+                                inputs.forEach(input => input.value = '');
+                                document.forms[0][0].focus();
+                            }
+                        }
+
+                        let btn = document.getElementById("btn");
+                        btn.addEventListener('click', event => {
+                            submit();
+                        })
+
+                        function submit() {
+                            console.log("Submitting...!");
+                            let code = "";
+                            inputs.forEach((input) => {
+                                code += input.value;
+
+                            });
+                            console.log(code);
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
