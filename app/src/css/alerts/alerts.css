@@ -1,0 +1,13 @@
+.alert-container {
+  text-align: center;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: 1px solid black;
+}
+
+.info {
+  border: 1px solid #69d4fa;
+  background-color: #a2ffff;
+  color: #235b80;
+}/*# sourceMappingURL=alerts.css.map */
