@@ -1,3 +1,4 @@
+from tkinter import W
 from flask import jsonify
 from app import db
 from app.api import bp
@@ -9,8 +10,10 @@ from app.api.auth import token_auth
 @basic_auth.login_required
 def get_token():
     token = basic_auth.current_user().get_token()
+    role = basic_auth.current_user().get_role()
+    skip = basic_auth.current_user().get_skip()
     db.session.commit()
-    return jsonify({'token': token})
+    return jsonify({'token': token, 'role': role.name if role is not None else "", "skip": skip})
 
 
 @bp.route('/tokens', methods=['DELETE'])

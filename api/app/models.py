@@ -42,6 +42,9 @@ class Tag(db.Model):
 
     project = relationship("Project")
 
+class Role(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True, nullable=False)
 
 class Project(PaginatedMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -95,12 +98,14 @@ class Project(PaginatedMixin, db.Model):
 class User(PaginatedMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     public_id = db.Column(db.Integer, unique=True, nullable=False)
+    role_id = db.Column(db.Integer, ForeignKey("role.id"), nullable=True)
     email = db.Column(db.String, unique=True, nullable=False)
     _username = db.Column(db.String, unique=True, nullable=False)
     _password = db.Column("password", db.String, nullable=False)
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
     token = db.Column(db.String(32), index=True, unique=True)
+    skip_q = db.Column(db.Boolean, default=False)
     token_expiration = db.Column(db.DateTime)
     # TODO: Additional requirements for user
 
@@ -150,6 +155,13 @@ class User(PaginatedMixin, db.Model):
             self.public_id = str(uuid.uuid4())
             self.username = self.email
 
+    def get_role(self):
+        name = Role.query.filter_by(id=self.role_id).first()
+        return name
+
+    def get_skip(self):
+        return self.skip_q
+
     def get_token(self, expires_in=3600):
         now = datetime.utcnow()
         if self.token and self.token_expiration > now + timedelta(seconds=60):
@@ -187,5 +199,30 @@ with current_app.app_context():
             db.session.add(Tag(name='sports'))
             db.session.add(Tag(name='science'))
             db.session.add(Tag(name='programming'))
+
+            db.session.commit()
+
+        roles = Role.query.all()
+
+        if len(roles) == 0:
+            db.session.add(Role(name='basic'))
+            db.session.add(Role(name='contributor'))
+            db.session.add(Role(name='admin'))
+
+            db.session.commit()
+
+        admin = User.query.filter_by(role_id=3).first()
+
+        if admin is None:
+            db.session.add(User(
+                email = 'admin@test.test',
+                first_name = 'admin',
+                last_name = 'tester',
+                role_id = 3,
+                password = 'test1234',
+                _username = 'admin@test.test',
+                public_id = str(uuid.uuid4()),
+                skip_q = True
+            ))
 
             db.session.commit()

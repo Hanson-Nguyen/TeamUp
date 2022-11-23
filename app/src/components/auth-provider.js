@@ -4,7 +4,9 @@ import { useLocation, Navigate } from 'react-router-dom'
 export const AuthContext = createContext({
   authed: false,
   login: () => { },
-  logout: () => { }
+  logout: () => { },
+  role: null,
+  skip: false,
 });
 
 export const useAuth = () => {
@@ -14,16 +16,20 @@ export const useAuth = () => {
 const AuthProvider = ({ children }) => {
   const token = localStorage.getItem('token')
   const [authed, setAuthed] = useState(false);
+  const role = null
+  const skip = false
 
   const login = (auth) => {
     setAuthed(true);
+    role = auth.role
+    skip = auth.skip
     localStorage.setItem('token', auth.token)
   }
   const logout = () => {
     setAuthed(false);
   }
 
-  let value = { authed, token, login, logout }
+  let value = { authed, token, login, logout, role, skip }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
