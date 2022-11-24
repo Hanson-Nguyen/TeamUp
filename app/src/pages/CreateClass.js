@@ -1,9 +1,15 @@
 import { Button, Form } from "react-bootstrap";
 import DashboardLayout from "../Layout/DashboardLayout";
 import "../css/class/create-class.scss";
+import { useAuth } from "../components/auth-provider";
+import { Navigate } from "react-router-dom";
 
 
 const CreateClass = () => {
+  const {role} = useAuth
+
+  if (role !== "contributor") return <Navigate to='/dashboard' />
+
   return (
     <>
       <DashboardLayout>

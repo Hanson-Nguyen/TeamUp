@@ -10,9 +10,12 @@ import { useAuth } from '../components/auth-provider';
 
 const HomePage = () => {
   const [index, setIndex] = useState(0)
-  const {role} = useAuth()
-  console.log(role)
+  const {role, skip} = useAuth()
+
+
+  if (role === "contributor") return <Navigate to='/dashboard/create-class' />
   if (role === 'admin') return <Navigate to='/dashboard/admin' />
+  if (skip === 'true') return <Navigate to="/dashboard/search-class"/>
 
   const questionnaire = [
     {

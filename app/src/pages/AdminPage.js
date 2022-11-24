@@ -6,17 +6,19 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
+import { Navigate } from "react-router-dom";
 
 const AdminPage = () => {
-  const { token } = useAuth()
-
+  const { token, role } = useAuth()
   const [data, setData] = useState({})
 
   useEffect(() => {
     apiStore.getUsers(token, true)
-      .then(res => setData(res))
-      .catch()
+    .then(res => setData(res))
+    .catch()
   }, [token])
+
+  if (role !== 'admin') return <Navigate to='/dashboard' />
 
   const columns = [
     { dataField: "id", text: "id" },
