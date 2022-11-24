@@ -5,11 +5,15 @@ import { ToggleButtonGroup } from 'react-bootstrap';
 
 import DashboardLayout from '../Layout/DashboardLayout';
 import '../css/homepage/homepage.scss'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '../components/auth-provider';
 
 const HomePage = () => {
   const [index, setIndex] = useState(0)
-  const navigate = useNavigate()
+  const {role} = useAuth()
+  console.log(role)
+  if (role === 'admin') return <Navigate to='/dashboard/admin' />
+
   const questionnaire = [
     {
       question: 'Which of these best describes your major',
@@ -29,8 +33,8 @@ const HomePage = () => {
     if (index < questionnaire.length - 1) {
       setIndex(index + 1)
     } else {
-      // send questionnaire to db
-      navigate('/create-class');
+
+     return <Navigate to='/create-class' />
     }
   }
 

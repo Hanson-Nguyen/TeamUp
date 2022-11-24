@@ -15,16 +15,17 @@ export const useAuth = () => {
 
 const AuthProvider = ({ children }) => {
   const token = localStorage.getItem('token')
+  let role = localStorage.getItem('role')
+  let skip = localStorage.getItem('skip_w')
   const [authed, setAuthed] = useState(false);
-  const role = null
-  const skip = false
 
   const login = (auth) => {
     setAuthed(true);
-    role = auth.role
-    skip = auth.skip
     localStorage.setItem('token', auth.token)
+    localStorage.setItem('role', auth.role)
+    localStorage.setItem('skip_w', auth.skip)
   }
+
   const logout = () => {
     setAuthed(false);
   }

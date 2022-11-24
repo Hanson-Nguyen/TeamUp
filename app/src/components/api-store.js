@@ -76,15 +76,23 @@ const ApiStore = () => (
 
       return await ApiRunner('PUT', `/users/${id}`, payload)
     },
-    getUsers: async (token) => {
+    getUsers: async (token, include=false, page, perPage) => {
       const payload = {
         headers: new Headers({
           "Content-Type": "application/json",
           'Authorization': 'Bearer ' + token
         })
       }
+      let queryParams = '?'
 
-      return await ApiRunner('GET', '/users', payload)
+      if (page && perPage) {
+        queryParams += `page=${page}&per_page=${perPage}`
+        if (include) queryParams += `&include`
+      } else {
+        if (include) queryParams += 'include'
+      }
+
+      return await ApiRunner('GET', `/users${queryParams}`, payload)
     },
     getUserById: async (id, token) => {
       const payload = {
