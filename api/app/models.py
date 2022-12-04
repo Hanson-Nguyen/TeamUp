@@ -77,6 +77,7 @@ class Project(PaginatedMixin, db.Model):
             data['tag'] = tag.name
             data['size'] = self.size
             data['description'] = self.description
+            data['published'] = self.published
 
         return data
 

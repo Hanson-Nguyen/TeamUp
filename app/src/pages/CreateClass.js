@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 
 
 const CreateClass = () => {
-  const {role} = useAuth
+  const {role} = useAuth()
 
   if (role !== "contributor") return <Navigate to='/dashboard' />
 

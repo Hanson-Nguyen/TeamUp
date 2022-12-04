@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.2.2",
     "http-status-codes": "^2.2.0",
+    "playwright": "^1.28.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-bootstrap-table-next": "^4.0.3",
@@ -43,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.28.1"
   }
 }

@@ -18,9 +18,13 @@ const AuthProvider = ({ children }) => {
   let role = localStorage.getItem('role')
   let skip = localStorage.getItem('skip_w')
   const [authed, setAuthed] = useState(false);
+  const authContext = useAuth()
 
   const login = (auth) => {
     setAuthed(true);
+    authContext.role = auth.role
+    authContext.skip = auth.skip
+
     localStorage.setItem('token', auth.token)
     localStorage.setItem('role', auth.role)
     localStorage.setItem('skip_w', auth.skip)

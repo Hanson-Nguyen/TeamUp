@@ -12,16 +12,18 @@ from app.api.auth import token_auth
 @bp.route('/projects/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_project(id):
-    return jsonify(Project.query.get_or_404(id).to_dict())
+    include = 'include' in request.args
+    return jsonify(Project.query.get_or_404(id).to_dict(include))
 
 
 @bp.route('/projects', methods=['GET'])
 @token_auth.login_required
 def get_projects():
     page = request.args.get('page', 1, type=int)
+    include = 'include' in request.args
     per_page = min(request.args.get('per_page', 10, type=int), 100)
     data = Project.to_collection_dict(
-        Project.query, page, per_page, 'api.get_projects')
+        Project.query, page, per_page, include, 'api.get_projects')
     return jsonify(data)
 
 

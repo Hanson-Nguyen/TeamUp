@@ -61,14 +61,8 @@ const AdminPage = () => {
     prePageText: '<',
     showTotal: true,
     alwaysShowAllBtns: true,
-    onPageChange: function (page, sizePerPage) {
-      console.log('page', page);
-      console.log('sizePerPage', sizePerPage);
-    },
-    onSizePerPageChange: function (page, sizePerPage) {
-      console.log('page', page);
-      console.log('sizePerPage', sizePerPage);
-    }
+    onPageChange: function (page, sizePerPage) {},
+    onSizePerPageChange: function (page, sizePerPage) {}
   })
 
   return (

@@ -17,7 +17,7 @@ function App() {
 }
 
 root.render(
-  <StrictMode>
+  // <StrictMode>
     <App />
-  </StrictMode>
+  // </StrictMode>
 );
