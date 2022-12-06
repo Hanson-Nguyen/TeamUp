@@ -28,11 +28,11 @@ body {
 }
 
 .signin {
-    height: 550px;
+    height: 600px;
     width: 500px;
     border-radius: 25px;
     padding: 2rem;
-    
+
     top: 50%;
     left: 50%;
     position: absolute;
@@ -69,7 +69,7 @@ body {
 
 }
 
-.signin-card 
+.signin-card
 
 .signin-card-header {
     margin-bottom: 1rem;
@@ -99,7 +99,7 @@ body {
 
         .form-item-icon {
             position: relative;
-            top: 2.35rem;
+            top: 2.7rem;
             left: 1.4rem;
             font-size: 1.3rem;
             opacity: .7;
@@ -111,6 +111,10 @@ body {
         margin-bottom: 15px;
         display: flex;
         align-items: center;
+
+      #rememberMeCheckBox {
+        margin-right: 10px;
+      }
     }
 
     .form-item-other {

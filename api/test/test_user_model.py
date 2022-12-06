@@ -14,7 +14,7 @@ def test_to_dict(app):
         assert 'public_id'not in data
         assert '_links' in data
 
-        data = user.to_dict(includeProfile=True)
+        data = user.to_dict(include=True)
 
         assert 'public_id' in data
 

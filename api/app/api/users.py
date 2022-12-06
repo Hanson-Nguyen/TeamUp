@@ -8,6 +8,7 @@ from flask import url_for
 from app.api.errors import bad_request
 from app.api.auth import token_auth
 
+
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):
@@ -17,10 +18,12 @@ def get_user(id):
 @bp.route('/users', methods=['GET'])
 @token_auth.login_required
 def get_users():
-    page = request.args.get('page',1, type=int)
+    page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
-    data = User.to_collection_dict(User.query, page, per_page, 'api.get_users')
+    include = 'include' in request.args
+    data = User.to_collection_dict(User.query, page, per_page, include, 'api.get_users')
     return jsonify(data)
+
 
 @bp.route('/users', methods=['POST'])
 def create_user():
@@ -43,6 +46,13 @@ def create_user():
     response.headers['Location'] = url_for('api.get_user', id=user.id)
     return response
 
+@bp.route('/me/info', methods=['GET'])
+@token_auth.login_required
+def get_current_user():
+    user = token_auth.current_user()
+
+    return jsonify(user.to_dict(True))
+
 @bp.route('/users/<int:id>', methods=['PUT'])
 @token_auth.login_required
 def update_user(id):
@@ -52,15 +62,31 @@ def update_user(id):
     user = User.query.get_or_404(id)
     data = request.get_json() or {}
 
-    if 'username' in data and data['username'] != user.username and \
-        User.query.filter_by(username=data['username']).first():
-        return bad_request()
-
-    if 'email' in data and data['email'] != user.email and \
-        User.query.filter_by(email=data['email']).first():
+    if 'email' in data and data['email'] != user.email \
+            and User.query.filter_by(email=data['email']).first():
         return bad_request()
 
     user.from_dict(data, new_user=False)
+
     db.session.commit()
 
     return jsonify(user.to_dict())
+
+@bp.route('/users/<int:id>/tag', methods=['GET'])
+@token_auth.login_required
+def tag_user(id):
+    user = token_auth.current_user()
+
+    if (user.role_id != 1):
+        return bad_request()
+
+    return '', 204
+
+@bp.route('/users/<int:id>', methods=['DELETE'])
+@token_auth.login_required
+def delete_user(id):
+    User.query.filter_by(id=id).delete()
+
+    db.session.commit()
+
+    return '', 204

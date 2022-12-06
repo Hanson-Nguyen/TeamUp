@@ -7,7 +7,7 @@ const AlertMessage = (props) => {
   const SimpleAlert = () => {
     return (
       <>
-      <div className={`alert-container ${type}`}>
+      <div id="alert_message" className={`alert-container ${type}`}>
         {message}
       </div>
       </>

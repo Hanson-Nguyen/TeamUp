@@ -34,21 +34,20 @@ const LoginPage = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    // const res = await ApiStore.getToken(formState)
+    const res = await ApiStore.getToken(formState)
 
-    // if (!res) {
-    //   setAlertState({
-    //     show: true,
-    //     message: 'Invalid Username and Password.',
-    //     type: 'info'
-    //   })
+    if (res.error) {
+      setAlertState({
+        show: true,
+        message: 'Invalid Username and Password.',
+        type: 'info'
+      })
 
-    //   return
-    // }
+      return
+    }
 
-    // const token = JSON.parse(res)
-    // login(token);
-    navigate('/home');
+    login(res);
+    navigate('/');
   }
 
   const displayAlert = () => {

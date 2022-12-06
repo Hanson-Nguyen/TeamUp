@@ -15,6 +15,7 @@ db = SQLAlchemy()
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
+    app.app_context().push()
 
     # some deploy systems set the database url in the environ
     db_url = os.environ.get("DATABASE_URL")
@@ -45,11 +46,12 @@ def create_app(test_config=None):
     # initialize Flask-SQLAlchemy and the init-db command
     db.init_app(app)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(load_staging_command)
 
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
 
-    CORS(app, origins='http://localhost:3000')
+    CORS(app, origins=['http://localhost:3000', 'http://localhost'])
 
     return app
 
@@ -58,6 +60,9 @@ def init_db():
     db.drop_all()
     db.create_all()
 
+def load_staging():
+    from app.models import load_staging as load
+    load()
 
 @click.command("init-db")
 @with_appcontext
@@ -65,3 +70,9 @@ def init_db_command():
     """Clear existing data and create new tables."""
     init_db()
     click.echo("Initialized the database.")
+
+@click.command("load-staging")
+@with_appcontext
+def load_staging_command():
+    load_staging()
+    click.echo("Loading staging data into database")

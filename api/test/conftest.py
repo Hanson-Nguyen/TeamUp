@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash
 from app import create_app
 from app import db
 from app import init_db
-from app.models import User, ProjectType, Project
+from app.models import User, Tag, Project
 
 _user1_pass = generate_password_hash("test")
 _user2_pass = generate_password_hash("other")
@@ -32,8 +32,8 @@ def app():
             (
                 User(_username="user@test.com", _password=_user1_pass, first_name="user", last_name="test", email="user@test.com", public_id=str(uuid.uuid4())),
                 User(_username="other@test.com", _password=_user2_pass, first_name="other", last_name="test", email="other@test.com", public_id=str(uuid.uuid4())),
-                ProjectType(type="test_type"),
-                Project(name="test_project", size=4, description="dummy data test project", type_id=1)
+                Tag(name="test_type"),
+                Project(name="test_project", size=4, description="dummy data test project", tag_id=1)
             )
         )
 

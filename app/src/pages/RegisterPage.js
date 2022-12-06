@@ -56,7 +56,7 @@ const RegisterPage = () => {
 
       const res = await ApiStore.createUser(formState)
 
-      if (!res) {
+      if (res.error) {
         setAlertState({
           show: true,
           message: 'That email is already in use.',
@@ -88,7 +88,7 @@ const RegisterPage = () => {
 
             <div className='signup-card-header'>
               <h1>Welcome to TeamUp</h1>
-              <div>Thank you for registering an account with us.</div>
+              <div id="thank_you">Thank you for registering an account with us.</div>
             </div>
 
             <Link to='/login'>
@@ -118,17 +118,17 @@ const RegisterPage = () => {
           <form className='signup-card-form' onSubmit={onSubmit}>
             <div className='form-title'>First Name</div>
             <div className='form-item'>
-              <input className='form-input' type='text' defaultValue={formState.first_name} onChange={(e) => handleChange(e, 'first_name')} required autoFocus />
+              <input id='input_first' className='form-input' type='text' defaultValue={formState.first_name} onChange={(e) => handleChange(e, 'first_name')} required autoFocus />
             </div>
 
             <div className='form-title'>Last Name</div>
             <div className='form-item'>
-              <input className='form-input' type='text' defaultValue={formState.last_name} onChange={(e)=> handleChange(e, 'last_name')} required autoFocus />
+              <input id='input_last' className='form-input' type='text' defaultValue={formState.last_name} onChange={(e)=> handleChange(e, 'last_name')} required autoFocus />
             </div>
 
             <div className='form-title'>Email Address</div>
             <div className='form-item'>
-              <input className='form-input' type='text' defaultValue={formState.email} onChange={(e)=> handleChange(e, 'email')} required autoFocus />
+              <input id='input_email' className='form-input' type='text' defaultValue={formState.email} onChange={(e)=> handleChange(e, 'email')} required autoFocus />
             </div>
 
             <div className='form-title'>Password</div>
@@ -138,7 +138,7 @@ const RegisterPage = () => {
 
             <div className='form-title'>Confirm Password</div>
             <div className='form-item'>
-              <input className='form-input' type={showPasswordDisplay ? 'text': 'password'} defaultValue={formState.confirm_pass} onChange={(e)=> handleChange(e, 'confirm_pass')} required autoFocus />
+              <input id='input_confirm' className='form-input' type={showPasswordDisplay ? 'text': 'password'} defaultValue={formState.confirm_pass} onChange={(e)=> handleChange(e, 'confirm_pass')} required autoFocus />
             </div>
 
             <div className='form-item-other'>
