@@ -1,12 +1,15 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import {
-  BsPersonCircle,
   BsFillArrowLeftCircleFill,
   BsFillArrowRightCircleFill,
 } from "react-icons/bs";
+import { useAuth } from "../auth-provider";
 
 const NavBar = ({ setIsOpen, isOpen }) => {
+
+  const { logout } = useAuth()
+
   return (
     <Navbar
       className="navbar shadow-sm p-3 mb-3 bg-white"
@@ -27,17 +30,10 @@ const NavBar = ({ setIsOpen, isOpen }) => {
         </Nav.Link>
       </Nav>
 
-      <Nav className="justify-content-center flex-grow-1 pe-3">
-        <Nav.Link href="#action2">
-          <div> LABEL</div>
-        </Nav.Link>
-      </Nav>
-
-      <Nav className="justify-content-end flex-grow-1 pe-3">
+      <Nav className="justify-content-end flex-grow-1 pe-3" onClick={() => logout()}>
         <Nav.Link href="/login">
           <div style={{ display: "flex", alignItems: "center" }}>
-            <BsPersonCircle />
-            <span style={{marginLeft: 4}}>John</span>
+            <span style={{ marginLeft: 4 }}>logout</span>
           </div>
         </Nav.Link>
       </Nav>

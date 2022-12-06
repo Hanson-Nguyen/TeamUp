@@ -7,24 +7,55 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import { Navigate } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
+import Modal from "react-bootstrap/Modal";
+import Form from 'react-bootstrap/Form';
 
 const AdminPage = () => {
   const { token, role } = useAuth()
   const [data, setData] = useState({})
+  const [show, setShow] = useState('close')
+  const [selectedUser, setSelectedUser] = useState(0)
+  const openDeleteModal = (id) => {
+    setSelectedUser(id)
+    setShow('delete')
+  }
+  const closeModal = () => {
+    setSelectedUser(0)
+    setShow('close')
+  }
 
   useEffect(() => {
     apiStore.getUsers(token, true)
-    .then(res => setData(res))
-    .catch()
-  }, [token])
+      .then(res => setData(res))
+      .catch()
+  }, [token, show])
 
   if (role !== 'admin') return <Navigate to='/dashboard' />
 
+
+  const onDelete = async (e) => {
+    e.preventDefault()
+
+    const res = await apiStore.deleteUser(selectedUser, token)
+
+    if (res.error) return
+  }
+
   const columns = [
     { dataField: "id", text: "id" },
-    { dataField: "first_name", text:"First Name" },
+    { dataField: "first_name", text: "First Name" },
     { dataField: "last_name", text: "Last Name" },
-    { dataField: "email", text: "Email"}
+    { dataField: "email", text: "Email" },
+    {
+      dataField: "", text: "Remove", formatter: (_, row) => {
+        return (
+          <div className="w-50 text-center mx-auto">
+            <Button className="btn-sm" variant="danger" onClick={() => openDeleteModal(row.id)}>Delete</Button>
+          </div>
+        )
+      }
+    }
   ]
 
   const defaultSorted = [{
@@ -32,46 +63,59 @@ const AdminPage = () => {
     order: 'desc'
   }];
 
-  const {items, _meta } = data
+  const { items, _meta } = data
   const pagination = _meta
-  ? paginationFactory({
-    page: _meta.page,
-    sizePerPage: _meta.per_page,
-    lastPageText: '>>',
-    firstPageText: '<<',
-    nextPageText: '>',
-    prePageText: '<',
-    showTotal: true,
-    alwaysShowAllBtns: true,
-    onPageChange: async function (page, sizePerPage) {
-      const _data = await apiStore.getUsers(token, true, page, sizePerPage)
-      setData(_data)
-    },
-    onSizePerPageChange: async function (sizePerPage, page) {
-      const _data = await apiStore.getUsers(token, true, page, sizePerPage)
-      setData(_data)
-    }
-  })
-  :paginationFactory({
-    page: 1,
-    sizePerPage: 10,
-    lastPageText: '>>',
-    firstPageText: '<<',
-    nextPageText: '>',
-    prePageText: '<',
-    showTotal: true,
-    alwaysShowAllBtns: true,
-    onPageChange: function (page, sizePerPage) {},
-    onSizePerPageChange: function (page, sizePerPage) {}
-  })
+    ? paginationFactory({
+      page: _meta.page,
+      sizePerPage: _meta.per_page,
+      lastPageText: '>>',
+      firstPageText: '<<',
+      nextPageText: '>',
+      prePageText: '<',
+      showTotal: true,
+      alwaysShowAllBtns: true,
+      onPageChange: async function (page, sizePerPage) {
+        const _data = await apiStore.getUsers(token, true, page, sizePerPage)
+        setData(_data)
+      },
+      onSizePerPageChange: async function (sizePerPage, page) {
+        const _data = await apiStore.getUsers(token, true, page, sizePerPage)
+        setData(_data)
+      }
+    })
+    : paginationFactory({
+      page: 1,
+      sizePerPage: 10,
+      lastPageText: '>>',
+      firstPageText: '<<',
+      nextPageText: '>',
+      prePageText: '<',
+      showTotal: true,
+      alwaysShowAllBtns: true,
+      onPageChange: function (page, sizePerPage) { },
+      onSizePerPageChange: function (page, sizePerPage) { }
+    })
 
   return (
     <DashboardLayout>
       <div className="container mx-auto">
+        <Modal show={show === 'delete'} onHide={closeModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Delete User</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Are you sure you want to delete this use?</h4>
+            <Form onSubmit={onDelete}>
+              <Button className="btn-sm" type="submit">Yes</Button>
+              <Button className="btn-sm" variant="danger" onClick={() => closeModal()}>No</Button>
+            </Form>
+          </Modal.Body>
+        </Modal>
+
         {
           items && _meta
-          ? <BootstrapTable bootstrap4 keyField="id" data={items} columns={columns} defaultSorted={defaultSorted} pagination={pagination}/>
-          : null
+            ? <BootstrapTable bootstrap4 keyField="id" data={items} columns={columns} defaultSorted={defaultSorted} pagination={pagination} />
+            : null
         }
 
       </div>

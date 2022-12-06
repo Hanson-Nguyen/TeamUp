@@ -32,8 +32,8 @@ def app():
             (
                 User(_username="user@test.com", _password=_user1_pass, first_name="user", last_name="test", email="user@test.com", public_id=str(uuid.uuid4())),
                 User(_username="other@test.com", _password=_user2_pass, first_name="other", last_name="test", email="other@test.com", public_id=str(uuid.uuid4())),
-                Tag(type="test_type"),
-                Project(name="test_project", size=4, description="dummy data test project", type_id=1)
+                Tag(name="test_type"),
+                Project(name="test_project", size=4, description="dummy data test project", tag_id=1)
             )
         )
 

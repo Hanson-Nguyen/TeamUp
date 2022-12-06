@@ -104,6 +104,16 @@ const ApiStore = () => (
 
       return await ApiRunner('GET', `/users/${id}`, payload)
     },
+    getCurrentUser: async (token) => {
+      const payload = {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
+        })
+      }
+
+      return await ApiRunner('GET', `/me/info`, payload)
+    },
     deleteUser: async (id, token) => {
       const payload = {
         headers: new Headers({
@@ -162,6 +172,16 @@ const ApiStore = () => (
       }
 
       return await ApiRunner('PUT', `/projects/${id}`, payload)
+    },
+    joinProject: async (id, token) => {
+      const payload = {
+        headers: new Headers({
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
+        })
+      }
+
+      return await ApiRunner('GET' `/projects/${id}/join`, payload)
     },
     publishProject: async (id, token) => {
       const payload = {

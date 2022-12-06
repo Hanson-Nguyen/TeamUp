@@ -32,6 +32,9 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setAuthed(false);
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('skip_w')
   }
 
   let value = { authed, token, login, logout, role, skip }

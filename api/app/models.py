@@ -13,12 +13,25 @@ from werkzeug.security import generate_password_hash
 
 from app import db
 
+user_project = db.Table('user_project',
+                        db.Column('user_id', db.Integer,
+                                  db.ForeignKey('user.id')),
+                        db.Column('project_id', db.Integer,
+                                  db.ForeignKey('project.id'))
+                        )
+
+user_tag = db.Table('user_tag',
+                    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
+                    )
+
+
 class PaginatedMixin(object):
     @staticmethod
-    def to_collection_dict(query, page, per_page, include, endpoint, **kwargs):
+    def to_collection_dict(query, page, per_page, include, endpoint, id=None, **kwargs):
         resources = query.paginate(page, per_page, False)
         data = {
-            'items': [item.to_dict(include) for item in resources.items],
+            'items': [item.to_dict(include, id) for item in resources.items],
             '_meta': {
                 'page': page,
                 'per_page': per_page,
@@ -40,11 +53,13 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
 
-    project = relationship("Project")
+    _project = db.relationship("Project", back_populates="_tag")
+    _users = db.relationship("User", secondary=user_tag, back_populates="_tags")
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
+
 
 class Project(PaginatedMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,7 +67,13 @@ class Project(PaginatedMixin, db.Model):
     name = db.Column(db.String, unique=False, nullable=False)
     description = db.Column(db.String, unique=False, nullable=True)
     size = db.Column(db.Integer, unique=False, nullable=False)
-    published = db.Column(db.Boolean, unique=False, nullable=False, default=False)
+    published = db.Column(db.Boolean, unique=False,
+                          nullable=False, default=False)
+    contributor_id = db.Column(db.Integer, ForeignKey("user.id"))
+
+    _tag = db.relationship("Tag", back_populates="_project")
+    _user = db.relationship("User", back_populates="_project")
+    _users = db.relationship("User", secondary=user_project, back_populates="_projects")
 
     @validates('size')
     def validate_size(self, key, size):
@@ -62,7 +83,7 @@ class Project(PaginatedMixin, db.Model):
 
         return size
 
-    def to_dict(self, include=False):
+    def to_dict(self, include=False, user_id=None):
         data = {
             'id': self.id,
             'name': self.name,
@@ -72,8 +93,15 @@ class Project(PaginatedMixin, db.Model):
         }
 
         if include:
+            joined = None
             tag = Tag.query.filter_by(
                 id=self.tag_id).first()
+
+            if (user_id):
+                joined = Project.query.filter(Project._users.any(id=user_id), Project.id.like(self.id)).first()
+                closed = len(User.query.filter(User._projects.any(id=self.id)).all()) >= self.size
+                data['joined'] = joined != None
+                data['closed'] = closed
             data['tag'] = tag.name
             data['size'] = self.size
             data['description'] = self.description
@@ -89,11 +117,13 @@ class Project(PaginatedMixin, db.Model):
         if new_project and 'tag' in data:
             tag = Tag.query.filter_by(
                 name=data['tag']).first()
-
             if tag:
                 self.tag_id = tag.id
             else:
                 raise NoResultFound()
+
+        if new_project and 'contributor_id' in data:
+            self.contributor_id = data['contributor_id']
 
 
 class User(PaginatedMixin, db.Model):
@@ -108,7 +138,10 @@ class User(PaginatedMixin, db.Model):
     token = db.Column(db.String(32), index=True, unique=True)
     skip_q = db.Column(db.Boolean, default=False)
     token_expiration = db.Column(db.DateTime)
-    # TODO: Additional requirements for user
+
+    _tags = db.relationship("Tag", secondary=user_tag, back_populates="_users")
+    _projects = db.relationship("Project", secondary=user_project, back_populates="_users")
+    _project = db.relationship("Project", back_populates="_user")
 
     @hybrid_property
     def username(self):
@@ -130,7 +163,7 @@ class User(PaginatedMixin, db.Model):
     def check_password(self, value):
         return check_password_hash(self.password, value)
 
-    def to_dict(self, include=False):
+    def to_dict(self, include=False, id=None):
         data = {
             'id': self.id,
             'email': self.email,
@@ -185,45 +218,112 @@ class User(PaginatedMixin, db.Model):
         return user
 
 
-user_project = db.Table('user_project',
-                        db.Column('user_id', db.Integer,
-                                  db.ForeignKey('user.id')),
-                        db.Column('project_id', db.Integer,
-                                  db.ForeignKey('project.id'))
-                        )
+def load_staging():
 
-with current_app.app_context():
-    if current_app.config["SECRET_KEY"] == "dev":
-        tags = Tag.query.all()
+    tags = Tag.query.all()
 
-        if len(tags) == 0:
-            db.session.add(Tag(name='sports'))
-            db.session.add(Tag(name='science'))
-            db.session.add(Tag(name='programming'))
+    if len(tags) == 0:
+        db.session.add(Tag(name='sports'))
+        db.session.add(Tag(name='science'))
+        db.session.add(Tag(name='programming'))
 
-            db.session.commit()
+        db.session.commit()
 
-        roles = Role.query.all()
+    roles = Role.query.all()
 
-        if len(roles) == 0:
-            db.session.add(Role(name='basic'))
-            db.session.add(Role(name='contributor'))
-            db.session.add(Role(name='admin'))
+    if len(roles) == 0:
+        db.session.add(Role(name='basic'))
+        db.session.add(Role(name='contributor'))
+        db.session.add(Role(name='admin'))
 
-            db.session.commit()
+        db.session.commit()
 
-        admin = User.query.filter_by(role_id=3).first()
+    admin = User.query.filter_by(role_id=3).first()
 
-        if admin is None:
-            db.session.add(User(
-                email = 'admin@test.test',
-                first_name = 'admin',
-                last_name = 'tester',
-                role_id = 3,
-                password = 'test1234',
-                _username = 'admin@test.test',
-                public_id = str(uuid.uuid4()),
-                skip_q = True
-            ))
+    if admin is None:
+        db.session.add(User(
+            email='admin@test.test',
+            first_name='admin',
+            last_name='tester',
+            role_id=3,
+            password='test1234',
+            _username='admin@test.test',
+            public_id=str(uuid.uuid4()),
+            skip_q=True
+        ))
 
-            db.session.commit()
+        db.session.add(User(
+            email='contributor@test.test',
+            first_name='contributor',
+            last_name='tester',
+            role_id=2,
+            password='test1234',
+            _username='contributor@test.test',
+            public_id=str(uuid.uuid4()),
+            skip_q=True
+        ))
+
+        db.session.add(User(
+            email='aTester@test.test',
+            first_name='alice',
+            last_name='tester',
+            password='test1234',
+            role_id=1,
+            _username='aTester@test.test',
+            public_id=str(uuid.uuid4()),
+            skip_q=True
+        ))
+
+        db.session.add(User(
+            email='bTester@test.test',
+            first_name='brian',
+            last_name='tester',
+            password='test1234',
+            role_id=1,
+            _username='bTester@test.test',
+            public_id=str(uuid.uuid4()),
+            skip_q=False
+        ))
+
+        db.session.commit()
+
+    projects = Project.query.all()
+
+    if len(projects) == 0:
+        db.session.add(Project(
+            name="Test Programing Project",
+            description="A staged project representing a programming project or activity",
+            size=4,
+            tag_id=3,
+            published=True,
+            contributor_id=2
+        ))
+
+        db.session.add(Project(
+            name="Test Sports Project",
+            description="A staged project representing a sports project or activity",
+            size=4,
+            tag_id=1,
+            published=True,
+            contributor_id=2
+        ))
+
+        db.session.add(Project(
+            name="Test Science Project",
+            description="A staged project representing a science project or activity",
+            size=4,
+            tag_id=2,
+            published=True,
+            contributor_id=2
+        ))
+
+        db.session.commit()
+
+    basic_user = User.query.filter_by(first_name='alice').first()
+    prog_tag = Tag.query.filter_by(id=3).first()
+    prog_project = Project.query.filter_by(tag_id=3).first()
+
+    basic_user._tags.append(prog_tag)
+    prog_project._users.append(basic_user)
+
+    db.session.commit()

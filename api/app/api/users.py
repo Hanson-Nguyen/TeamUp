@@ -46,6 +46,12 @@ def create_user():
     response.headers['Location'] = url_for('api.get_user', id=user.id)
     return response
 
+@bp.route('/me/info', methods=['GET'])
+@token_auth.login_required
+def get_current_user():
+    user = token_auth.current_user()
+
+    return jsonify(user.to_dict(True))
 
 @bp.route('/users/<int:id>', methods=['PUT'])
 @token_auth.login_required
@@ -66,6 +72,15 @@ def update_user(id):
 
     return jsonify(user.to_dict())
 
+@bp.route('/users/<int:id>/tag', methods=['GET'])
+@token_auth.login_required
+def tag_user(id):
+    user = token_auth.current_user()
+
+    if (user.role_id != 1):
+        return bad_request()
+
+    return '', 204
 
 @bp.route('/users/<int:id>', methods=['DELETE'])
 @token_auth.login_required
