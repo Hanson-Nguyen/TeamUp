@@ -61,7 +61,7 @@ const ProjectModal = (props) => {
     e.preventDefault()
 
     const res = await apiStore.joinProject(props.view, token)
-
+    console.log('is this running')
     if (res.error) {
       return
     }

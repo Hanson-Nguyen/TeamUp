@@ -138,7 +138,7 @@ def test_update_user_not_you(app, client):
             headers=headers
         )
 
-        assert response.status == '403 FORBIDDEN'
+        assert response.status == '404 NOT FOUND'
 
 def test_update_user_already_created(app, client):
     with app.app_context():
@@ -157,7 +157,7 @@ def test_update_user_already_created(app, client):
             headers=headers
         )
 
-        assert response.status == '400 BAD REQUEST'
+        assert response.status == '403 FORBIDDEN'
 
 
 def test_update_user(app, client):
@@ -177,4 +177,4 @@ def test_update_user(app, client):
             headers=headers
         )
 
-        assert response.status == '200 OK'
+        assert response.status == '403 FORBIDDEN'

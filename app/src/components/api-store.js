@@ -65,9 +65,20 @@ const ApiStore = () => (
 
       return await ApiRunner('POST', '/users', payload)
     },
-    updateUser: async (id, token, { email, first_name, last_name, password }) => {
+    tagUser: async(token, {total}) => {
       const payload = {
-        body: JSON.stringify({ email, first_name, last_name, password }),
+        body: JSON.stringify({ total }),
+        headers: new Headers({
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer ' + token
+        })
+      }
+
+      return await ApiRunner('POST', '/users/tag', payload)
+    },
+    updateUser: async (id, token, { email, first_name, last_name, password, role }) => {
+      const payload = {
+        body: JSON.stringify({ email, first_name, last_name, password, role }),
         headers: new Headers({
           "Content-Type": "application/json",
           'Authorization': 'Bearer ' + token
@@ -181,7 +192,7 @@ const ApiStore = () => (
         })
       }
 
-      return await ApiRunner('GET' `/projects/${id}/join`, payload)
+      return await ApiRunner('GET', `/projects/${id}/join`, payload)
     },
     publishProject: async (id, token) => {
       const payload = {

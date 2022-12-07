@@ -7,6 +7,8 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import { Navigate } from "react-router-dom";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 import Button from 'react-bootstrap/Button';
 import Modal from "react-bootstrap/Modal";
 import Form from 'react-bootstrap/Form';
@@ -42,11 +44,34 @@ const AdminPage = () => {
     if (res.error) return
   }
 
+  const handleSelect = (e, row) => {
+    apiStore.updateUser(row.id, token, {role: e})
+      .then(res => window.location.reload())
+      .catch()
+  }
   const columns = [
     { dataField: "id", text: "id" },
     { dataField: "first_name", text: "First Name" },
     { dataField: "last_name", text: "Last Name" },
     { dataField: "email", text: "Email" },
+    {
+      dataField: "role", text: "Role", formatter: (_, row) => {
+        const rowDropDown = ['basic', 'contributor']
+
+        return (
+          <DropdownButton
+            variant="outline-secondary"
+            title={row.role}
+            id="input-group-dropdown-1"
+            onSelect={(e) => handleSelect(e, row)}
+          >
+            {rowDropDown.map(item => (
+              <Dropdown.Item key={item} eventKey={item}>{item}</Dropdown.Item>
+            ))}
+          </DropdownButton>
+        )
+      }
+    },
     {
       dataField: "", text: "Remove", formatter: (_, row) => {
         return (

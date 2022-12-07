@@ -7,17 +7,15 @@ import DashboardLayout from '../Layout/DashboardLayout';
 import '../css/homepage/homepage.scss'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../components/auth-provider';
+import apiStore from '../components/api-store';
 
 const HomePage = () => {
   const [index, setIndex] = useState(0)
-  const {role, skip} = useAuth()
-
-  if (role === 'admin') return <Navigate to='/dashboard/admin' />
-  if (skip === 'true') return <Navigate to="/dashboard/search-class"/>
+  const { role, skip, token } = useAuth()
 
   const questionnaire = [
     {
-      question: 'Which of these best describes your major',
+      question: 'Which of these best describes your major?',
       type: 'choice',
       answer: 0,
       answerKey: ['Programming', 'Physical Science', 'Statistics', 'Other']
@@ -28,35 +26,57 @@ const HomePage = () => {
       answer: 0,
       answerKey: ['Beginner', 'Intermediate', 'Proficient', 'Expert']
     },
+    {
+      question: 'Do Any of these programming languages apply to you?',
+      type: 'choice',
+      answer: 0,
+      answerKey: ['Python', 'R', 'Java', 'No']
+    },
+    {
+      question: 'How will you use TeamUp?',
+      type: 'choice',
+      answer: 0,
+      answerKey: ['Mentorship', 'Practice', 'Coordinating', 'Networking']
+    }
   ]
 
-  const nextQuestion = () => {
-    if (index < questionnaire.length - 1) {
-      setIndex(index + 1)
-    } else {
+  if (role === 'admin') return <Navigate to='/dashboard/admin' />
+  if (skip === 'true') return <Navigate to="/dashboard/search-class" />
 
-     return <Navigate to='/dashboard/search-class' />
-    }
-  }
 
   const selectedAnswer = (idx, answer) => {
     questionnaire[idx].answer = answer
-    nextQuestion()
+    setIndex(index + 1)
+
+    if (index === questionnaire.length - 1) {
+      const total = questionnaire.reduce((acc, answer) => acc + answer, 0)
+     apiStore.tagUser(token, {total})
+        .then(res => res.json())
+        .catch()
+
+      window.localStorage.setItem("skip_w", true)
+    }
   }
 
   return (
     <DashboardLayout>
       <div className="container mx-auto text-center">
-        <h3 className="mb-4">{questionnaire[index].question}</h3>
-        {questionnaire[index].type === 'choice' ?
-          <>
-            <ToggleButtonGroup type="radio" name="options" className="w-100">
-              {questionnaire[index].answerKey.map((obj, i) => {
-                return <ToggleButton key={i} className="mx-3 rounded w-75"  value={i} onClick={() => selectedAnswer(index, i)} > {obj} </ToggleButton>
-              })}
-            </ToggleButtonGroup>
-          </>:
-          false
+        {
+          index < questionnaire.length
+            ? <>
+              <h3 className="mb-4">{questionnaire[index].question}</h3>
+              {questionnaire[index].type === 'choice' ?
+                <>
+                  <ToggleButtonGroup type="radio" name="options" className="w-100">
+                    {questionnaire[index].answerKey.map((obj, i) => {
+                      return <ToggleButton key={i} className="mx-3 rounded w-75" value={i} onClick={() => selectedAnswer(index, i)} > {obj} </ToggleButton>
+                    })}
+                  </ToggleButtonGroup>
+                </> :
+                false
+              }
+            </>
+            : <Navigate to="/dashboard/search-class" />
         }
       </div>
     </DashboardLayout>

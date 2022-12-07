@@ -173,10 +173,13 @@ class User(PaginatedMixin, db.Model):
         }
 
         if include:
+            role = Role.query.filter_by(
+            id=self.role_id).first()
             data['first_name'] = self.first_name
             data['last_name'] = self.last_name
             data['public_id'] = self.public_id
             data['username'] = self.username
+            data['role'] = role.name if role else 'None'
 
         return data
 
@@ -184,6 +187,11 @@ class User(PaginatedMixin, db.Model):
         for field in ['email', 'first_name', 'last_name']:
             if field in data:
                 setattr(self, field, data[field])
+
+        if 'role' in data:
+            role = Role.query.filter_by(name=data['role']).first()
+            self.role_id = role.id
+
         if new_user and 'password' in data:
             self.password = data['password']
             self.public_id = str(uuid.uuid4())

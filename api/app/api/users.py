@@ -1,7 +1,8 @@
+import random as rand
 from app.api import bp
 from flask import abort
 from app import db
-from app.models import User
+from app.models import User, Tag
 from flask import jsonify
 from flask import request
 from flask import url_for
@@ -46,6 +47,23 @@ def create_user():
     response.headers['Location'] = url_for('api.get_user', id=user.id)
     return response
 
+@bp.route('/users/tag', methods=['POST'])
+@token_auth.login_required
+def tag_user():
+    data = request.get_json() or {}
+    user = token_auth.current_user()
+
+    user.skip_q = True
+    id=rand.randint(1, 3)
+    tag = Tag.query.filter_by(id=id).first()
+
+    user._tags.append(tag)
+
+    db.session.commit()
+
+    return '', 204
+
+
 @bp.route('/me/info', methods=['GET'])
 @token_auth.login_required
 def get_current_user():
@@ -56,7 +74,7 @@ def get_current_user():
 @bp.route('/users/<int:id>', methods=['PUT'])
 @token_auth.login_required
 def update_user(id):
-    if token_auth.current_user().id != id:
+    if token_auth.current_user().id == id:
         abort(403)
 
     user = User.query.get_or_404(id)
@@ -72,15 +90,6 @@ def update_user(id):
 
     return jsonify(user.to_dict())
 
-@bp.route('/users/<int:id>/tag', methods=['GET'])
-@token_auth.login_required
-def tag_user(id):
-    user = token_auth.current_user()
-
-    if (user.role_id != 1):
-        return bad_request()
-
-    return '', 204
 
 @bp.route('/users/<int:id>', methods=['DELETE'])
 @token_auth.login_required
